@@ -1,0 +1,11 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="GemfireProducer" type="Application" factoryName="Application" nameIsGenerated="true">
+    <option name="MAIN_CLASS_NAME" value="com.redis.connect.gemfire.producer.GemfireProducer" />
+    <module name="redisconnect-gemfire-producer" />
+    <option name="PROGRAM_PARAMETERS" value="-h 127.0.0.1 -p 10334 -i 10 -r session -o I" />
+    <option name="VM_PARAMETERS" value="-Dlogback.configurationFile=$PROJECT_DIR$/config/logback.xml -Dlog4j.configurationFile=$PROJECT_DIR$/config/logback.xml" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
