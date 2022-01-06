@@ -15,6 +15,30 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
+    <name>${project.artifactId}</name>
+    <description>Redis Connect Gemfire Producer</description>
+    <url>https://github.com/redis-field-engineering/redisconnect-gemfire-producer</url>
+    <inceptionYear>2020</inceptionYear>
+
+    <licenses>
+        <license>
+            <name>Redis Enterprise License</name>
+            <url>https://redis.com/legal/licenses/</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <id>viragtripathi</id>
+            <name>Redis</name>
+            <url>https://github.com/viragtripathi</url>
+            <roles>
+                <role>Committer</role>
+            </roles>
+        </developer>
+    </developers>
+
     <dependencies>
         <dependency>
             <groupId>org.apache.geode</groupId>
@@ -29,7 +53,7 @@
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
-            <version>1.2.7</version>
+            <version>1.2.10</version>
         </dependency>
     </dependencies>
 
@@ -92,4 +116,82 @@
             </plugin>
         </plugins>
     </build>
+    <!-- JReleaser build profile to deploy to GH -->
+    <profiles>
+        <profile>
+            <id>jreleaser</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+                <property>
+                    <name>redisconnect-gemfire-producer</name>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-dependency-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>copy-dependencies</id>
+                                <phase>prepare-package</phase>
+                                <goals>
+                                    <goal>copy-dependencies</goal>
+                                </goals>
+                                <configuration>
+                                    <excludeArtifactIds>slf4j-log4j12</excludeArtifactIds>
+                                    <outputDirectory>${project.build.directory}/lib</outputDirectory>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <artifactId>maven-assembly-plugin</artifactId>
+                        <configuration>
+                            <finalName>${project.artifactId}-${project.version}</finalName>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.jreleaser</groupId>
+                        <artifactId>jreleaser-maven-plugin</artifactId>
+                        <version>0.9.0</version>
+                        <executions>
+                            <execution>
+                                <id>package</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>full-release</goal>
+                                </goals>
+                                <configuration>
+                                    <jreleaser>
+                                        <distributions>
+                                            <redis-connect-archive>
+                                                <artifacts>
+                                                    <artifact>
+                                                        <path>
+                                                            ${project.build.directory}/${project.artifactId}-${project.version}.tar.gz
+                                                        </path>
+                                                    </artifact>
+                                                </artifacts>
+                                            </redis-connect-archive>
+                                        </distributions>
+                                        <release>
+                                            <github>
+                                                <owner>redis-field-engineering</owner>
+                                                <branch>main</branch>
+                                                <commitAuthor>
+                                                    <name>viragtripathi</name>
+                                                    <email>virag.tripathi@gmail.com</email>
+                                                </commitAuthor>
+                                                <overwrite>true</overwrite>
+                                            </github>
+                                        </release>
+                                    </jreleaser>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>
