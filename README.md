@@ -3,7 +3,7 @@ Gemfire Producer for Redis Connect testing
 
 ## Download
 
-<br>Download the [latest release](https://github.com/redis-field-engineering/redisconnect-gemfire-producer/releases) and un-tar (e.g. tar -xvf redisconnect-gemfire-producer-1.0-SNAPSHOT.tar.gz) the redisconnect-gemfire-producer-1.0-SNAPSHOT.tar.gz archive.
+Download the [latest release](https://github.com/redis-field-engineering/redisconnect-gemfire-producer/releases) and un-tar (e.g. tar -xvf redisconnect-gemfire-producer-1.0-SNAPSHOT.tar.gz) the redisconnect-gemfire-producer-1.0-SNAPSHOT.tar.gz archive.
 
 ## Usage
 
