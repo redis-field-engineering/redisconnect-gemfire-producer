@@ -12,7 +12,6 @@ import picocli.CommandLine.Option;
 
 import static org.apache.geode.cache.client.ClientRegionShortcut.PROXY;
 
-@SuppressWarnings("InfiniteLoopStatement")
 @Command(name = "com.redis.connect.gemfire.producer.GemfireProducer", usageHelpAutoWidth = true, description = "Gemfire producer load generator.")
 public class GemfireProducer implements Runnable {
 
@@ -60,33 +59,35 @@ public class GemfireProducer implements Runnable {
             logger.error("Exception in creating region..{}", regionName, e);
         }
 
-        while (true) {
-            for (int i = 0; i < iter; i++) {
-                try {
-                    switch (opType) {
-                        case 'I':
-                            region.put("Key" + i, "Value" + i);
-                            break;
-                        case 'U':
-                            region.put("Key" + i, "UpdatedValue" + i);
-                            break;
-                        case 'D':
-                            region.remove("Key" + i);
-                            break;
-                        default:
-                            logger.info("Unknown operation type {}.", opType);
-                    }
-                } catch (Exception e) {
-                    logger.error("Exception occurred : ", e);
-                }
-            }
-
+        for (int i = 1; i <= iter; i++) {
             try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                logger.error("InterruptedException..", e);
+                switch (opType) {
+                    case 'I':
+                        region.put("Key" + i, "Value" + i);
+                        logger.info("Adding Key: {} and Value: {} in region: {}", "Key" + i, "Value" + i, region);
+                        break;
+                    case 'U':
+                        region.put("Key" + i, "UpdatedValue" + i);
+                        logger.info("Updating Key: {} to Value: {} in region: {}", "Key" + i, "Value" + i, region);
+                        break;
+                    case 'D':
+                        region.remove("Key" + i);
+                        logger.info("Deleting Key: {} from region: {}", "Key" + i, region);
+                        break;
+                    default:
+                        logger.info("Unknown operation type {}.", opType);
+                }
+                logger.info(String.valueOf(region.query("select * from /" + regionName)));
+              //logger.info(String.valueOf(region.query("select * from /" + regionName + " alias where alias.Key=" + "Key"+i)));
+            } catch (Exception e) {
+                logger.error("Exception occurred: ", e);
             }
+        }
 
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            logger.error("InterruptedException..", e);
         }
     }
 }
