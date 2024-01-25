@@ -14,7 +14,7 @@
             <maxHistory>60</maxHistory>
         </rollingPolicy>
         <encoder>
-            <pattern>%d %p %c{1.} [%t] %m%n</pattern>
+            <pattern>%d %p %c{1} [%t] %m%n</pattern>
         </encoder>
     </appender>
 
@@ -33,7 +33,11 @@
         <appender-ref ref="REDISCONNECT"/>
         <appender-ref ref="CONSOLE" />
     </logger>
-    <logger name="org.apache" level="DEBUG" additivity="false">
+    <logger name="org.apache.geode" level="DEBUG" additivity="false">
+        <appender-ref ref="REDISCONNECT"/>
+        <appender-ref ref="CONSOLE"/>
+    </logger>
+    <logger name="org.eclipse" level="OFF" additivity="false">
         <appender-ref ref="REDISCONNECT"/>
         <appender-ref ref="CONSOLE"/>
     </logger>
